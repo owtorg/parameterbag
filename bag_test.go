@@ -6,7 +6,8 @@ import (
 
 func TestBag(t *testing.T) {
 
-	var _ *ParameterBag = NewParameterBag()
+	//Call it like this to test that we are actually satisfying our interface
+	var _ Bag = NewParameterBag()
 
 	bag := NewParameterBag()
 	bag.Set("test", "testval")
@@ -21,11 +22,11 @@ func TestBag(t *testing.T) {
 		t.Error("expected blank string got", tp)
 	}
 
-	if bag.Has("tp") == true {
+	if bag.Has("tp") {
 		t.Error("bag should not have key tp")
 	}
 
-	if bag.Has("test") == false {
+	if !bag.Has("test") {
 		t.Error("bag should have key test")
 	}
 
@@ -41,18 +42,21 @@ func TestBagFromMap(t *testing.T) {
 	params := make(map[string]string)
 	params["banana"] = "mango"
 	params["flying_in"] = "a blue dream"
-	var bag *ParameterBag = NewParameterBagFromMap(params)
 
-	if bag.Has("banana") == false {
+	var _ Bag = NewParameterBagFromMap(params)
+
+	var bag = NewParameterBagFromMap(params)
+
+	if !bag.Has("banana") {
 		t.Error("bag should contain key:", "banana")
 	}
 
-	if bag.Has("flying_in") == false {
+	if !bag.Has("flying_in") {
 		t.Error("bag should contain key:", "flying_in")
 	}
 
 	bag.Set("take me down", "to funky town")
-	if bag.Has("take me down") == false {
+	if !bag.Has("take me down") {
 		t.Error("bag should contain key:", "take me down")
 	}
 
