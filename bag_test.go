@@ -72,3 +72,52 @@ func TestBagFromMap(t *testing.T) {
 		t.Error("bag should have 3 items")
 	}
 }
+
+func TestMutableCopy(t *testing.T) {
+
+	bag := NewParameterBag()
+	bag.Set("test", "testval")
+	bag.Freeze()
+	if bag.IsFrozen() != true {
+		t.Error("bag should report as frozen")
+	}
+	err := bag.Set("tom_goes", "to the mayor")
+	if err == nil {
+		t.Error("bag should be immutable")
+	}
+
+	mutable := bag.GetMutableCopy()
+	if !mutable.Has("test") {
+		t.Error("mutable copy does not contain key from origin")
+	}
+
+	if mutable.Get("test") != "testval" {
+		t.Error("mutable copy value was not set correctly.    ", "mutable:", mutable.Get("test"), "original:", bag.Get("test"))
+	}
+
+	err = mutable.Set("tom_goes", "to the mayor")
+	if err != nil {
+		t.Error("bag should be mutable")
+	}
+
+	err = mutable.Set("test", "new value")
+	if err != nil {
+		t.Error("bag should allow key test to be changed")
+	}
+
+	//check to see if the original bag changed when we set a key in the mutable bag.
+	//If so a shallow copy took place
+	if bag.Get("test") != "testval" {
+		t.Error("deep copy of original bag was not taken!   ", "mutable:", mutable.Get("test"), "original:", bag.Get("test"))
+	}
+
+	mutable.Freeze()
+	if mutable.IsFrozen() != true {
+		t.Error("bag should report as frozen")
+	}
+	err = mutable.Set("tom_goes", "to the mayor")
+	if err == nil {
+		t.Error("mutable bag should have been made immutable")
+	}
+
+}
