@@ -10,7 +10,10 @@ func TestBag(t *testing.T) {
 	var _ Bag = NewParameterBag()
 
 	bag := NewParameterBag()
-	bag.Set("test", "testval")
+	err := bag.Set("test", "testval")
+	if err != nil {
+		t.Error("could not set value in new bag", err.Error())
+	}
 
 	tv := bag.Get("test")
 	if tv != "testval" {
@@ -55,7 +58,11 @@ func TestBagFromMap(t *testing.T) {
 		t.Error("bag should contain key:", "flying_in")
 	}
 
-	bag.Set("take me down", "to funky town")
+	err := bag.Set("take me down", "to funky town")
+	if err != nil {
+		t.Error("could not set value in new bag", err.Error())
+	}
+
 	if !bag.Has("take me down") {
 		t.Error("bag should contain key:", "take me down")
 	}
@@ -76,12 +83,15 @@ func TestBagFromMap(t *testing.T) {
 func TestMutableCopy(t *testing.T) {
 
 	bag := NewParameterBag()
-	bag.Set("test", "testval")
+	err := bag.Set("test", "testval")
+	if err != nil {
+		t.Error("could not set value in new bag", err.Error())
+	}
 	bag.Freeze()
-	if bag.IsFrozen() != true {
+	if !bag.IsFrozen() {
 		t.Error("bag should report as frozen")
 	}
-	err := bag.Set("tom_goes", "to the mayor")
+	err = bag.Set("tom_goes", "to the mayor")
 	if err == nil {
 		t.Error("bag should be immutable")
 	}
@@ -112,7 +122,7 @@ func TestMutableCopy(t *testing.T) {
 	}
 
 	mutable.Freeze()
-	if mutable.IsFrozen() != true {
+	if !mutable.IsFrozen() {
 		t.Error("bag should report as frozen")
 	}
 	err = mutable.Set("tom_goes", "to the mayor")

@@ -37,6 +37,7 @@ func NewParameterBagFromMap(params map[string]string) *ParameterBag {
 	return &ParameterBag{params: params, frozen: false}
 }
 
+//GetMutableCopy returns a deep copy of the ParameterBag
 func (b *ParameterBag) GetMutableCopy() *ParameterBag {
 
 	mutableCopy := NewParameterBag()
@@ -53,7 +54,7 @@ func (b *ParameterBag) Get(name string) string {
 
 //Set sets the specified parameter
 func (b *ParameterBag) Set(name string, value string) error {
-	if b.frozen == true {
+	if b.frozen {
 		return errors.New("Parameter bag is frozen")
 	}
 	b.params[name] = value
@@ -76,10 +77,12 @@ func (b *ParameterBag) ListParameters() []string {
 	return keys
 }
 
+//Freeze makes the ParameterBag immutable
 func (b *ParameterBag) Freeze() {
 	b.frozen = true
 }
 
+//IsFrozen returns true or false depending on the current freeze state
 func (b *ParameterBag) IsFrozen() bool {
 	return b.frozen
 }
