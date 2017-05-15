@@ -11,7 +11,7 @@ type Bag interface {
 	//Has a parameter or not?
 	Has(string) bool
 	//List all parameters that exist in this bag
-	ListParameters() []string
+	Keys() []string
 	//Freeze the parameter bag, if this is true then Set will return an error
 	//One the bag is frozen it cannot be unfrozen but GetMutableCopy() may be called on the ParameterBag
 	Freeze()
@@ -25,22 +25,22 @@ type ParameterBag struct {
 	frozen bool
 }
 
-// NewParameterBag - create a new parameter bag with a blank list of parameters
-func NewParameterBag() *ParameterBag {
+// New - create a new parameter bag with a blank list of parameters
+func New() *ParameterBag {
 	bag := make(map[string]string)
 	return &ParameterBag{params: bag, frozen: false}
 
 }
 
-// NewParameterBagFromMap - Create a new parameter bag by passing in an existing map[string]string
-func NewParameterBagFromMap(params map[string]string) *ParameterBag {
+// FromMap - Create a new parameter bag by passing in an existing map[string]string
+func FromMap(params map[string]string) *ParameterBag {
 	return &ParameterBag{params: params, frozen: false}
 }
 
 //GetMutableCopy returns a deep copy of the ParameterBag
 func (b *ParameterBag) GetMutableCopy() *ParameterBag {
 
-	mutableCopy := NewParameterBag()
+	mutableCopy := New()
 	for k, v := range b.params {
 		mutableCopy.params[k] = v
 	}
@@ -66,8 +66,8 @@ func (b *ParameterBag) Has(name string) bool {
 	return !(b.params[name] == "")
 }
 
-//ListParameters gets a slice of all the parameter keys in this bag
-func (b *ParameterBag) ListParameters() []string {
+//Keys gets a slice of all the parameter keys in this bag
+func (b *ParameterBag) Keys() []string {
 	keys := make([]string, len(b.params))
 	i := 0
 	for k := range b.params {

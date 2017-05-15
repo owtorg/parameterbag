@@ -7,9 +7,9 @@ import (
 func TestBag(t *testing.T) {
 
 	//Call it like this to test that we are actually satisfying our interface
-	var _ Bag = NewParameterBag()
+	var _ Bag = New()
 
-	bag := NewParameterBag()
+	bag := New()
 	err := bag.Set("test", "testval")
 	if err != nil {
 		t.Error("could not set value in new bag", err.Error())
@@ -33,7 +33,7 @@ func TestBag(t *testing.T) {
 		t.Error("bag should have key test")
 	}
 
-	plist := bag.ListParameters()
+	plist := bag.Keys()
 
 	if len(plist) != 1 {
 		t.Error("bag should have 1 item")
@@ -46,9 +46,9 @@ func TestBagFromMap(t *testing.T) {
 	params["banana"] = "mango"
 	params["flying_in"] = "a blue dream"
 
-	var _ Bag = NewParameterBagFromMap(params)
+	var _ Bag = FromMap(params)
 
-	var bag = NewParameterBagFromMap(params)
+	var bag = FromMap(params)
 
 	if !bag.Has("banana") {
 		t.Error("bag should contain key:", "banana")
@@ -73,7 +73,7 @@ func TestBagFromMap(t *testing.T) {
 		t.Error("could not take you down to funky town")
 	}
 
-	plist := bag.ListParameters()
+	plist := bag.Keys()
 
 	if len(plist) != 3 {
 		t.Error("bag should have 3 items")
@@ -82,7 +82,7 @@ func TestBagFromMap(t *testing.T) {
 
 func TestMutableCopy(t *testing.T) {
 
-	bag := NewParameterBag()
+	bag := New()
 	err := bag.Set("test", "testval")
 	if err != nil {
 		t.Error("could not set value in new bag", err.Error())
