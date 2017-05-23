@@ -32,6 +32,12 @@ func New() *ParameterBag {
 
 }
 
+//ParameterBagConstructor can be registered with the  bag factory
+func ParameterBagConstructor() Bag {
+	bag := make(map[string]string)
+	return &ParameterBag{params: bag, frozen: false}
+}
+
 // FromMap - Create a new parameter bag by passing in an existing map[string]string
 func FromMap(params map[string]string) *ParameterBag {
 	return &ParameterBag{params: params, frozen: false}
