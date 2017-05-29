@@ -1,6 +1,6 @@
 package parameterbag
 
-import "github.com/pkg/errors"
+import "errors"
 
 //Factory creates a new parameter bag
 //TODO - should this take an interface?
@@ -14,11 +14,11 @@ type Factory struct {
 //AddFactory allows you to register a factory type which can be called later via Create
 func (f *Factory) AddFactory(name string, factory Constructor) error {
 	if factory == nil {
-		return errors.Errorf("Bag factory %s does not exist.", name)
+		return errors.New("Bag factory " + name + " does not exist.")
 	}
 	_, registered := f.constructors[name]
 	if registered {
-		return errors.Errorf("Bag factory %s is already registered.", name)
+		return errors.New("Bag factory " + name + " is already registered.")
 	}
 	f.constructors[name] = factory
 	return nil

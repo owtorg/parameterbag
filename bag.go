@@ -32,8 +32,8 @@ func New() *ParameterBag {
 
 }
 
-//ParameterBagConstructor can be registered with the  bag factory
-func ParameterBagConstructor() Bag {
+//Construct can be registered with the  bag factory
+func Construct() Bag {
 	bag := make(map[string]string)
 	return &ParameterBag{params: bag, frozen: false}
 }
