@@ -2,8 +2,7 @@ package parameterbag
 
 import "errors"
 
-//Factory creates a new parameter bag
-//TODO - should this take an interface?
+//Constructor creates a new parameter bag
 type Constructor func() Bag
 
 //Factory is a generic factory for Parameter bags
@@ -28,7 +27,7 @@ func (f *Factory) AddFactory(name string, factory Constructor) error {
 func (f *Factory) Create(id string) (Bag, error) {
 	bagFactory, ok := f.constructors[id]
 	if !ok {
-		return nil, errors.New("Invalid Bag Type.")
+		return nil, errors.New("Invalid bag type")
 	}
 	return bagFactory(), nil
 }
